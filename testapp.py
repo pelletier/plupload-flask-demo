@@ -1,5 +1,5 @@
 import os
-from flask import Flask
+from flask import Flask, send_from_directory
 from flask import render_template, request, redirect, url_for
 from werkzeug import secure_filename
 
@@ -24,9 +24,16 @@ def upload():
                 filename = secure_filename(file.filename)
                 file.save(os.path.join(UPLOAD_FOLDER, filename))
                 saved_files_urls.append(url_for('uploaded_file', filename=filename))
-        return render_template('saved_files.html', urls=saved_files_urls)
+        return saved_files_urls[0]
+        #return render_template('saved_files.html', urls=saved_files_urls)
 
     return render_template('upload.html')
+
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(UPLOAD_FOLDER,
+                               filename)
+    
 
 app.debug = True
 

@@ -4,7 +4,8 @@
         <style type="text/css">@import url(/static/css/plupload.queue.css);</style>
         <script type="text/javascript" src="http://www.google.com/jsapi"></script>
         <script type="text/javascript">
-            google.load("jquery", "1.3");
+            google.load("jquery", "1.5.1");
+            google.load("jqueryui", "1.8.10");
         </script>
 
         <!-- Thirdparty intialization scripts, needed for the Google Gears and BrowserPlus runtimes -->
@@ -26,7 +27,7 @@
             $(function() {
                 $("#uploader").plupload({
                     // General settings
-                    runtimes : 'gears,flash,silverlight,browserplus,html5',
+                    runtimes : 'html5,gears,flash,silverlight,browserplus',
                     url : '/',
                     max_file_size : '10mb',
                     chunk_size : '1mb',
@@ -45,8 +46,24 @@
                     flash_swf_url : '/static/plupload/js/plupload.flash.swf',
 
                     // Silverlight settings
-                    silverlight_xap_url : '/static/plupload/js/plupload.silverlight.xap'
+                    silverlight_xap_url : '/static/plupload/js/plupload.silverlight.xap',
+
+                    init : {
+                        FileUploaded: function(up, file, info) {
+                            if (this.total.queued == 0) {
+                                /* All files are uploaded */
+                                alert("All files have been uploaded.");
+                            }
+
+                            console.log(info);
+                            $("#result").append("<li><a href='"+info.response+"'>"+info.response+"</a></li>");
+
+                        }
+                        
+                    }
                 });
+
+
 
                 // Client side form validation
                 $('form').submit(function(e) {
@@ -81,7 +98,9 @@
                 <input type="submit" value="Send">
             </div>
         </form>
-        
+
+        <ul id="result">
+        </ul>
 
 
     </body>
