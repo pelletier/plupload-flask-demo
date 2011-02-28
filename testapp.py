@@ -7,7 +7,8 @@ app = Flask(__name__)
 def upload():
     return render_template('upload.html')
 
+app.debug = True
+
 if __name__ == '__main__':
-    app.debug = True
     app.run()
 
