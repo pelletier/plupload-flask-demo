@@ -22,6 +22,33 @@
 
         <script type="text/javascript">
         // Convert divs to queue widgets when the DOM is ready
+                    function getInternetExplorerVersion()
+            // Returns the version of Internet Explorer or a -1
+            // (indicating the use of another browser).
+            {
+              var rv = -1; // Return value assumes failure.
+              if (navigator.appName == 'Microsoft Internet Explorer')
+              {
+                var ua = navigator.userAgent;
+                var re  = new RegExp("MSIE ([0-9]{1,}[\.0-9]{0,})");
+                if (re.exec(ua) != null)
+                  rv = parseFloat( RegExp.$1 );
+              }
+              return rv;
+            }
+            function checkVersion(min)
+            {
+              var ver = getInternetExplorerVersion();
+
+              if ( ver > -1 )
+              {
+                if ( ver >= min ) 
+                  return 0;
+                else
+                  return 1;
+              }
+              return -1;
+            }
         
         $(document).ready(function(){
             var runtimes = 'gears,flash,silverlight,browserplus,html5';
@@ -29,6 +56,11 @@
             if (typeof window.FileReader === 'undefined') {
             } else {
                 runtimes = 'html5,gears,flash,silverlight,browserplus';
+            }
+
+            if (checkVersion(9.0) == 1) {
+                // Running IE9
+                runtimes = 'flash,html4';
             }
             
 
